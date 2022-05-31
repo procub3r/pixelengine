@@ -1,5 +1,5 @@
 cc := clang
-cflags := -std=c99 -g -Wall -pipe -Ipixel/
+cflags := -std=c99 -O0 -glldb -Wall -pipe -Ipixel/
 libs := `pkg-config --static --libs glew glfw3`
 
 target := bin/main

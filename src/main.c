@@ -12,17 +12,26 @@ int main() {
 
     Object cubeObject = {
         .mesh = &cubeMesh,
-        .scale = ID_MAT4,
+        .scale = SCALE_MAT(0.5f, 0.5f, 0.5f),
         .rotation = ID_MAT4,
-        .translation = TRANSLATION_MAT(-0.1f, 0.0f, 3.0f),
+        .translation = TRANSLATION_MAT(-0.3f, -0.3f, 0.1f),
     };
     createObject(&cubeObject);
+
+    Object cubeObject2 = {
+        .mesh = &cubeMesh,
+        .scale = SCALE_MAT(0.5f, 0.75f, 0.5f),
+        .rotation = ID_MAT4,
+        .translation = TRANSLATION_MAT(0.3f, 0.3f, 0.1f),
+    };
+    createObject(&cubeObject2);
 
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     while (updateWindow()) {
         glClear(GL_COLOR_BUFFER_BIT);
         updateObject(&cubeObject);
+        updateObject(&cubeObject2);
         renderMeshInstances(&cubeMesh);
     }
 

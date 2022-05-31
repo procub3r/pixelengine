@@ -18,6 +18,7 @@ typedef struct Mesh {
     GLuint vao;
     VertexBuffer vertexBuffer;
     IndexBuffer indexBuffer;
+    InstanceAttribBuffer instanceAttribBuffer;
     unsigned int instanceCount;
     unsigned int instanceCapacity;
     InstanceAttributes* instanceAttribArray;

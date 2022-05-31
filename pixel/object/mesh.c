@@ -66,9 +66,6 @@ void createMesh(Mesh* mesh) {
     // Bind the index buffer becuase initIndexBuffer() unbinds it
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->indexBuffer.object);
 
-    glBindVertexArray(0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
     free(vertexBuffer);
     free(indexBuffer);
 
@@ -76,14 +73,31 @@ void createMesh(Mesh* mesh) {
     mesh->instanceCount = 0;
     mesh->instanceAttribArray = malloc(mesh->instanceCapacity * sizeof(InstanceAttributes));
 
+    mesh->instanceAttribBuffer = (InstanceAttribBuffer){
+        .size = mesh->instanceCapacity * sizeof(InstanceAttributes),
+    };
+    initInstanceAttribBuffer(&mesh->instanceAttribBuffer);
+    // It's not necessary to bind this either
+
+    glBindVertexArray(0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
     printf("Mesh \"%s\" loaded from file and initialized with initial capacity %u\n", mesh->file, mesh->instanceCapacity);
 }
 
 InstanceAttributes* addInstance(Mesh* mesh) {
     if (mesh->instanceCount == mesh->instanceCapacity) {
         mesh->instanceCapacity *= 2;
-        mesh->instanceAttribArray = realloc(mesh->instanceAttribArray, mesh->instanceCapacity * sizeof(InstanceAttributes));
+        size_t newSize = mesh->instanceCapacity * sizeof(InstanceAttributes);
+        mesh->instanceAttribArray = realloc(mesh->instanceAttribArray, newSize);
+
+        glBindBuffer(GL_ARRAY_BUFFER, mesh->instanceAttribBuffer.object);
+        // Set data to NULL becuase the data will be sent
+        // with glBufferSubData() before the draw call anyways
+        glBufferData(GL_ARRAY_BUFFER, newSize, NULL, GL_DYNAMIC_DRAW);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
+
     mesh->instanceCount++;
     printf("Instance attribute added to mesh \"%s\"\n", mesh->file);
     return &(mesh->instanceAttribArray[mesh->instanceCount - 1]);
@@ -91,10 +105,18 @@ InstanceAttributes* addInstance(Mesh* mesh) {
 
 void renderMeshInstances(Mesh* mesh) {
     glBindVertexArray(mesh->vao);
-    for (int i = 0; i < mesh->instanceCount; i++) {
-        // The type of an index is GL_UNSIGNED_INT by default for now
-        glDrawElements(GL_TRIANGLES, mesh->indexBuffer.count, GL_UNSIGNED_INT, 0);
-    }
+    
+    // Update the instance attribs
+    glBindBuffer(GL_ARRAY_BUFFER, mesh->instanceAttribBuffer.object);
+    GLsizeiptr bufferSize = mesh->instanceCount * sizeof(InstanceAttributes);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, bufferSize, mesh->instanceAttribArray);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    glDrawElementsInstanced(GL_TRIANGLES, mesh->indexBuffer.count, GL_UNSIGNED_INT, 0, mesh->instanceCount);
+    // for (int i = 0; i < mesh->instanceCount; i++) {
+    //     // The type of an index is GL_UNSIGNED_INT by default for now
+    //     glDrawElements(GL_TRIANGLES, mesh->indexBuffer.count, GL_UNSIGNED_INT, 0);
+    // }
     glBindVertexArray(0);
 }
 

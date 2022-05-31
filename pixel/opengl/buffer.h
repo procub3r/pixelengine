@@ -19,7 +19,14 @@ typedef struct IndexBuffer {
     GLenum usage;
 } IndexBuffer;
 
+// Same as struct VertexBuffer (for now)
+typedef struct InstanceAttribBuffer {
+    GLuint object;
+    GLsizeiptr size;
+} InstanceAttribBuffer;
+
 void initVertexBuffer(VertexBuffer* buf);
 void initIndexBuffer(IndexBuffer* buf);
+void initInstanceAttribBuffer(InstanceAttribBuffer* buf);
 
 #endif
