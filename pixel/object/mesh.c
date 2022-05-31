@@ -74,7 +74,7 @@ void createMesh(Mesh* mesh) {
 
     // Initialize the rest of the mesh
     mesh->instanceCount = 0;
-    mesh->instanceAttribs = malloc(mesh->instanceCapacity * sizeof(InstanceAttributes));
+    mesh->instanceAttribArray = malloc(mesh->instanceCapacity * sizeof(InstanceAttributes));
 
     printf("Mesh \"%s\" loaded from file and initialized with initial capacity %u\n", mesh->file, mesh->instanceCapacity);
 }
@@ -82,13 +82,23 @@ void createMesh(Mesh* mesh) {
 InstanceAttributes* addInstance(Mesh* mesh) {
     if (mesh->instanceCount == mesh->instanceCapacity) {
         mesh->instanceCapacity *= 2;
-        mesh->instanceAttribs = realloc(mesh->instanceAttribs, mesh->instanceCapacity * sizeof(InstanceAttributes));
+        mesh->instanceAttribArray = realloc(mesh->instanceAttribArray, mesh->instanceCapacity * sizeof(InstanceAttributes));
     }
     mesh->instanceCount++;
-    return &(mesh->instanceAttribs[mesh->instanceCount - 1]);
+    printf("Instance attribute added to mesh \"%s\"\n", mesh->file);
+    return &(mesh->instanceAttribArray[mesh->instanceCount - 1]);
+}
+
+void renderMeshInstances(Mesh* mesh) {
+    glBindVertexArray(mesh->vao);
+    for (int i = 0; i < mesh->instanceCount; i++) {
+        // The type of an index is GL_UNSIGNED_INT by default for now
+        glDrawElements(GL_TRIANGLES, mesh->indexBuffer.count, GL_UNSIGNED_INT, 0);
+    }
+    glBindVertexArray(0);
 }
 
 void destroyMesh(Mesh* mesh) {
-    free(mesh->instanceAttribs);
+    free(mesh->instanceAttribArray);
     printf("All instance attributes of mesh \"%s\" destroyed\n", mesh->file);
 }

@@ -5,6 +5,7 @@
 #include "window/window.h"
 #include "opengl/buffer.h"
 #include "object/mesh.h"
+#include "object/object.h"
 
 extern GLuint shaderProgram;
 

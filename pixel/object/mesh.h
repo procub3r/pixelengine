@@ -20,12 +20,13 @@ typedef struct Mesh {
     IndexBuffer indexBuffer;
     unsigned int instanceCount;
     unsigned int instanceCapacity;
-    InstanceAttributes* instanceAttribs;
+    InstanceAttributes* instanceAttribArray;
 } Mesh;
 
 void createMesh(Mesh* mesh);
 InstanceAttributes* addInstance(Mesh* mesh);
 // TODO: Implement removeInstance()
+void renderMeshInstances(Mesh* mesh);
 void destroyMesh(Mesh* mesh);
 
 #endif

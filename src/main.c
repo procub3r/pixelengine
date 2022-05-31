@@ -10,13 +10,20 @@ int main() {
     };
     createMesh(&cubeMesh);
 
+    Object cubeObject = {
+        .mesh = &cubeMesh,
+        .scale = ID_MAT4,
+        .rotation = ID_MAT4,
+        .translation = TRANSLATION_MAT(-0.1f, 0.0f, 3.0f),
+    };
+    createObject(&cubeObject);
+
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     while (updateWindow()) {
         glClear(GL_COLOR_BUFFER_BIT);
-        glBindVertexArray(cubeMesh.vao);
-        glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
-        glBindVertexArray(0);
+        updateObject(&cubeObject);
+        renderMeshInstances(&cubeMesh);
     }
 
     destroyMesh(&cubeMesh);
