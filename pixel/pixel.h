@@ -4,6 +4,7 @@
 #include <GL/glew.h>
 #include "window/window.h"
 #include "opengl/buffer.h"
+#include "object/mesh.h"
 
 extern GLuint shaderProgram;
 
