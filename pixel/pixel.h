@@ -3,6 +3,7 @@
 
 #include <GL/glew.h>
 #include "window/window.h"
+#include "opengl/buffer.h"
 
 extern GLuint shaderProgram;
 
