@@ -19,7 +19,6 @@ typedef struct IndexBuffer {
     GLenum usage;
 } IndexBuffer;
 
-// Same as struct VertexBuffer (for now)
 typedef struct InstanceAttribBuffer {
     GLuint object;
     GLsizeiptr size;

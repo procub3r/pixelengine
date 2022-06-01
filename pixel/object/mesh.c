@@ -85,7 +85,7 @@ void createMesh(Mesh* mesh) {
     printf("Mesh \"%s\" loaded from file and initialized with initial capacity %u\n", mesh->file, mesh->instanceCapacity);
 }
 
-InstanceAttributes* addInstance(Mesh* mesh) {
+unsigned int addInstance(Mesh* mesh) {
     if (mesh->instanceCount == mesh->instanceCapacity) {
         mesh->instanceCapacity *= 2;
         size_t newSize = mesh->instanceCapacity * sizeof(InstanceAttributes);
@@ -96,11 +96,12 @@ InstanceAttributes* addInstance(Mesh* mesh) {
         // with glBufferSubData() before the draw call anyways
         glBufferData(GL_ARRAY_BUFFER, newSize, NULL, GL_DYNAMIC_DRAW);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
+        
+        printf("Instance attrib array resized to %lu bytes\n", newSize);
     }
 
-    mesh->instanceCount++;
     printf("Instance attribute added to mesh \"%s\"\n", mesh->file);
-    return &(mesh->instanceAttribArray[mesh->instanceCount - 1]);
+    return mesh->instanceCount++;
 }
 
 void renderMeshInstances(Mesh* mesh) {

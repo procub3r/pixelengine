@@ -8,7 +8,7 @@ typedef struct Object {
     Mesh* mesh;
     Mat4 scale, rotation, translation;
     Mat4 modelMatrix;
-    InstanceAttributes* instanceAttribs;
+    unsigned int instanceID;
 } Object;
 
 void createObject(Object* object);

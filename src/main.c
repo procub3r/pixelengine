@@ -6,7 +6,7 @@ int main() {
 
     Mesh cubeMesh = {
         .file = "./res/cubeMesh.obj",
-        .instanceCapacity = 2,
+        .instanceCapacity = 1,
     };
     createMesh(&cubeMesh);
 

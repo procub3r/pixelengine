@@ -25,7 +25,7 @@ typedef struct Mesh {
 } Mesh;
 
 void createMesh(Mesh* mesh);
-InstanceAttributes* addInstance(Mesh* mesh);
+unsigned int addInstance(Mesh* mesh);
 // TODO: Implement removeInstance()
 void renderMeshInstances(Mesh* mesh);
 void destroyMesh(Mesh* mesh);
